@@ -22,8 +22,8 @@
 #include "semisync.h"
 
 #ifdef HAVE_PSI_INTERFACE
-extern PSI_mutex_key key_ss_mutex_LOCK_binlog_;
-extern PSI_cond_key key_ss_cond_COND_binlog_send_;
+extern PSI_mutex_key key_LOCK_binlog;
+extern PSI_cond_key key_COND_binlog_send;
 #endif
 
 extern PSI_stage_info stage_waiting_for_semi_sync_ack_from_slave;
@@ -379,14 +379,14 @@ class ReplSemiSyncMaster
   /* This cond variable is signaled when enough binlog has been sent to slave,
    * so that a waiting trx can return the 'ok' to the client for a commit.
    */
-  mysql_cond_t  COND_binlog_send_;
+  mysql_cond_t  COND_binlog_send;
 
   /* Mutex that protects the following state variables and the active
    * transaction list.
    * Under no cirumstances we can acquire mysql_bin_log.LOCK_log if we are
    * already holding LOCK_binlog_ because it can cause deadlocks.
    */
-  mysql_mutex_t LOCK_binlog_;
+  mysql_mutex_t LOCK_binlog;
 
   /* This is set to true when reply_file_name_ contains meaningful data. */
   bool            reply_file_name_inited_;
@@ -628,5 +628,9 @@ extern unsigned long long rpl_semi_sync_master_trx_wait_time;
      1 (default) : keep waiting until timeout even no available semi-sync slave.
 */
 extern char rpl_semi_sync_master_wait_no_slave;
+extern ReplSemiSyncMaster repl_semisync_master;
+
+int semi_sync_master_init();
+void semi_sync_master_deinit();
 
 #endif /* SEMISYNC_MASTER_H */

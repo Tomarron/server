@@ -93,5 +93,9 @@ private:
 extern char rpl_semi_sync_slave_enabled;
 extern unsigned long rpl_semi_sync_slave_trace_level;
 extern char rpl_semi_sync_slave_status;
+extern ReplSemiSyncSlave repl_semisync_slave;
+
+int semi_sync_slave_init();
+void semi_sync_slave_deinit();
 
 #endif /* SEMISYNC_SLAVE_H */
